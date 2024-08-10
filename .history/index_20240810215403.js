@@ -53,23 +53,19 @@ app.delete("/api/persons/:id", (req, resp) => {
 });
 
 const generateID = () => {
-  let Id = Math.floor(Math.random() * (persons.length + 10));
-
-  while (persons.find((n) => Number(n.id) === Id)) {
-    Id = Math.floor(Math.random() * (persons.length + 10));
+  const id = Math.floor(Math.random() * 10);
+  while (persons.find((n) => n.id === id)) {
+    id = Math.floor(Math.random() * 10);
   }
 
-  return String(Id);
+  return String(id);
 };
 
 app.post("/api/persons", (req, resp) => {
   const body = req.body;
 
   if (!body.name || !body.number) {
-    return resp.status(400).json({ error: "content missing" });
-  }
-  if (persons.find((p) => p.name === body.name)) {
-    return resp.status(409).json({ error: "name must be unique" });
+    return resp.status(404).json({ error: "content missing" });
   }
 
   const person = {

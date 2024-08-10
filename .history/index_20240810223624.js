@@ -53,10 +53,11 @@ app.delete("/api/persons/:id", (req, resp) => {
 });
 
 const generateID = () => {
-  let Id = Math.floor(Math.random() * (persons.length + 10));
-
-  while (persons.find((n) => Number(n.id) === Id)) {
-    Id = Math.floor(Math.random() * (persons.length + 10));
+  let Id = Math.floor(Math.random() * (persons.length + 1));
+  console.log(Id);
+  while (persons.find((n) => Number(n.id) === Id) || Id === 0) {
+    console.log("same ID!!!: " + Id);
+    Id = Math.floor(Math.random() * (persons.length + 1));
   }
 
   return String(Id);

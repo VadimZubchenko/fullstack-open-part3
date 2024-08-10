@@ -52,40 +52,19 @@ app.delete("/api/persons/:id", (req, resp) => {
   resp.status(204).end();
 });
 
-const generateID = () => {
-  let Id = Math.floor(Math.random() * (persons.length + 10));
-
-  while (persons.find((n) => Number(n.id) === Id)) {
-    Id = Math.floor(Math.random() * (persons.length + 10));
-  }
-
-  return String(Id);
-};
-
-app.post("/api/persons", (req, resp) => {
-  const body = req.body;
-
-  if (!body.name || !body.number) {
-    return resp.status(400).json({ error: "content missing" });
-  }
-  if (persons.find((p) => p.name === body.name)) {
-    return resp.status(409).json({ error: "name must be unique" });
-  }
-
+app.post("/api/persons/", (req, resp) => {
   const person = {
-    name: body.name,
-    number: body.number,
-    id: generateID(),
+    name: req.body.name,
+    number: req.body.number,
+    id: Math.random(1000),
   };
-  persons = persons.concat(person);
-  resp.json(person);
 });
 
 app.get("/info", (req, resp) => {
   const count = persons.length;
   const currentDate = new Date();
   resp.send(
-    `Phonebook has info of ${count} people <br></br>
+    `Phonebook has info of ${count} people </br></br>
     ${currentDate}`
   );
 });
