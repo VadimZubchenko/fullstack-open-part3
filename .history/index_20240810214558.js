@@ -53,26 +53,15 @@ app.delete("/api/persons/:id", (req, resp) => {
 });
 
 const generateID = () => {
-  let Id = Math.floor(Math.random() * (persons.length + 10));
-
-  while (persons.find((n) => Number(n.id) === Id)) {
-    Id = Math.floor(Math.random() * (persons.length + 10));
-  }
-
+  const Id = persons.length > 0 ? Math.floor(Math.random() * 1000) : 0;
   return String(Id);
 };
 
 app.post("/api/persons", (req, resp) => {
-  console.log(
-    `You can handle request with middleware express.json: ${req.body.name}`
-  ); // Доступ к JSON-данным через req.body
   const body = req.body;
 
   if (!body.name || !body.number) {
-    return resp.status(400).json({ error: "content missing" });
-  }
-  if (persons.find((p) => p.name === body.name)) {
-    return resp.status(409).json({ error: "name must be unique" });
+    return resp.status(404).json({ error: "content missing" });
   }
 
   const person = {

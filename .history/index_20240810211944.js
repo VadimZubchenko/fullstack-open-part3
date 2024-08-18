@@ -53,26 +53,15 @@ app.delete("/api/persons/:id", (req, resp) => {
 });
 
 const generateID = () => {
-  let Id = Math.floor(Math.random() * (persons.length + 10));
-
-  while (persons.find((n) => Number(n.id) === Id)) {
-    Id = Math.floor(Math.random() * (persons.length + 10));
-  }
-
-  return String(Id);
+  const maxId =
+    notes.length > 0 ? Math.max(...notes.map((n) => Number(n.id))) : 0;
+  return String(maxId + 1);
 };
-
-app.post("/api/persons", (req, resp) => {
-  console.log(
-    `You can handle request with middleware express.json: ${req.body.name}`
-  ); // Доступ к JSON-данным через req.body
+app.post("/api/persons/", (req, resp) => {
   const body = req.body;
 
-  if (!body.name || !body.number) {
-    return resp.status(400).json({ error: "content missing" });
-  }
-  if (persons.find((p) => p.name === body.name)) {
-    return resp.status(409).json({ error: "name must be unique" });
+  if (!req.body.name || !req.body.number) {
+    return resp.status(404).json({ error: "content missing" });
   }
 
   const person = {
@@ -88,7 +77,7 @@ app.get("/info", (req, resp) => {
   const count = persons.length;
   const currentDate = new Date();
   resp.send(
-    `Phonebook has info of ${count} people <br></br>
+    `Phonebook has info of ${count} people </br></br>
     ${currentDate}`
   );
 });
