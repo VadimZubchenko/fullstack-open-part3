@@ -3,10 +3,18 @@ var morgan = require("morgan");
 
 const app = express();
 
+// create custom token in order to produce log with req body
+morgan.token("body", function (req, res) {
+  let body = req.body;
+  return JSON.stringify(body);
+});
+
 app.use(express.json());
 
-// Using a predefined format string with the minimal output.
-app.use(morgan("tiny"));
+// Using format string of created custom token with body.
+app.use(
+  morgan(":method :url :status :res[content-length] - :response-time ms :body")
+);
 
 let persons = [
   {
