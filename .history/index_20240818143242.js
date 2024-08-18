@@ -4,9 +4,7 @@ var morgan = require("morgan");
 const app = express();
 
 app.use(express.json());
-
-// Using a predefined format string with the minimal output.
-app.use(morgan("tiny"));
+app.use(morgan());
 
 let persons = [
   {
@@ -67,6 +65,9 @@ const generateID = () => {
 };
 
 app.post("/api/persons", (req, resp) => {
+  console.log(
+    `You can handle request with middleware express.json: ${req.body.name}`
+  ); // Доступ к JSON-данным через req.body
   const body = req.body;
 
   if (!body.name || !body.number) {
