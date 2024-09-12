@@ -1,6 +1,7 @@
 const express = require("express");
 var morgan = require("morgan");
 
+// Load server exrpess
 const app = express();
 
 // create custom token in order to produce log with req body
@@ -9,6 +10,7 @@ morgan.token("body", function (req, res) {
   return JSON.stringify(body);
 });
 
+// Middleware to parse JSON data, makes the data available in req.bod
 app.use(express.json());
 
 // Using format string of created custom token with body.
@@ -42,11 +44,11 @@ let persons = [
 app.get("/", (req, resp) => {
   resp.send("<h1>Puhelinluettelo</h1>");
 });
-
+// Get All persons
 app.get("/api/persons", (req, resp) => {
   resp.json(persons);
 });
-
+// Get One person
 app.get("/api/persons/:id", (req, resp) => {
   const id = req.params.id;
   const person = persons.find((p) => p.id === id);
@@ -57,6 +59,7 @@ app.get("/api/persons/:id", (req, resp) => {
     resp.status(404).end();
   }
 });
+// Delete one person
 app.delete("/api/persons/:id", (req, resp) => {
   const id = req.params.id;
   persons = persons.filter((p) => p.id !== id);
@@ -73,8 +76,9 @@ const generateID = () => {
 
   return String(Id);
 };
-
+// Create one person
 app.post("/api/persons", (req, resp) => {
+  // Raw data of request changed into json and stored in req.body with middleware express.json()
   const body = req.body;
 
   if (!body.name || !body.number) {
