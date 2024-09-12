@@ -13,7 +13,8 @@ morgan.token("body", function (req, res) {
 // Middleware to parse JSON data, makes the data available in req.bod
 app.use(express.json());
 
-// Using format string of created custom token with body.
+// Create a new morgan logger middleware
+// using format string of created custom token with body.
 app.use(
   morgan(":method :url :status :res[content-length] - :response-time ms :body")
 );
@@ -78,7 +79,7 @@ const generateID = () => {
 };
 // Create one person
 app.post("/api/persons", (req, resp) => {
-  // Raw data of request changed into json and stored in req.body with middleware express.json()
+  // Raw data in json format of request changed into javascript-object and stored≤ in req.body with middleware express.json()
   const body = req.body;
 
   if (!body.name || !body.number) {
