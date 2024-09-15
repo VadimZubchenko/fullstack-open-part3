@@ -1,9 +1,9 @@
-# fly.toml app configuration file generated for fullstack-open-part3-delicate-surf-7930 on 2024-09-15T15:36:24+03:00
+# fly.toml app configuration file generated for fullstack-open-puhelinluettelo-7930 on 2024-09-15T17:13:51+03:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = 'fullstack-open-part3-delicate-surf-7930'
+app = 'fullstack-open-puhelinluettelo-7930'
 primary_region = 'arn'
 
 [build]
