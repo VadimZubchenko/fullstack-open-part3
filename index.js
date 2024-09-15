@@ -42,6 +42,8 @@ let persons = [
   },
 ];
 
+app.use(express.static("dist"));
+
 app.get("/", (req, resp) => {
   resp.send("<h1>Puhelinluettelo</h1>");
 });
@@ -107,7 +109,8 @@ app.get("/info", (req, resp) => {
   );
 });
 
-const PORT = 3001;
+const PORT = process.env.port || 3001;
+
 app.listen(PORT, () => {
-  console.log(`Server running on port: ${PORT}`);
+  console.log(`Server running at PORT: ${port}/`);
 });
