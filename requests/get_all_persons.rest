@@ -1,0 +1,1 @@
+GET https://fullstack-open-part3-do1q.onrender.com/api/persons
