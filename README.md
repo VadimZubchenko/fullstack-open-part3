@@ -6,6 +6,6 @@
 
 https://fullstack-open-puhelinluettelo-7930.fly.dev
 
-# Render
+# Render with DB on Mongo Atlas
 
 https://fullstack-open-part3-do1q.onrender.com
