@@ -1,0 +1,8 @@
+
+PUT http://localhost:3001/api/people/670262e7d20cf6c4677e8fd5
+Content-Type: application/json
+
+{
+  "name": "Toivo Tyylinen",
+  "number": "+095-455-555-5461"
+}
