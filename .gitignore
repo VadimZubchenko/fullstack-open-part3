@@ -3,3 +3,5 @@ Dockerfile
 .env
 dist/
 .DS_Store
+.vscode
+.gitHub 
