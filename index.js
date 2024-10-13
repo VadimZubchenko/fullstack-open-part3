@@ -19,13 +19,13 @@ morgan.token("body", function (req, res) {
 // Middleware to parse JSON data, makes the data available in req.bod
 app.use(express.json());
 
+app.use(express.static("dist"));
+
 // Create a new morgan logger middleware
 // using format string of created custom token with body.
 app.use(
   morgan(":method :url :status :res[content-length] - :response-time ms :body")
 );
-
-app.use(express.static("dist"));
 
 //This endpoint works just when dist is out of use
 app.get("/", (req, resp) => {
