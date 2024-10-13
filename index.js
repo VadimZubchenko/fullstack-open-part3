@@ -81,9 +81,6 @@ app.post("/api/people", (req, resp) => {
   if (!body.name || !body.number) {
     return resp.status(400).json({ error: "content missing" });
   }
-  /*   if (Person.find({}).then((p) => p.name === body.name)) {
-    return resp.status(409).json({ error: "name must be unique" });
-  } */
 
   const person = new Person({
     name: body.name,
@@ -110,12 +107,13 @@ app.put("/api/people/:id", (req, resp, next) => {
 });
 
 app.get("/info", (req, resp) => {
-  const count = Person.length;
   const currentDate = new Date();
-  resp.send(
-    `Phonebook has info of ${count} people <br></br>
-    ${currentDate}`
-  );
+  Person.find({}).then((person) => {
+    resp.send(
+      `Phonebook has info of ${person.length} people <br></br>
+      ${currentDate}`
+    );
+  });
 });
 
 //Initiate error handler middlewares
