@@ -1,14 +1,14 @@
 const express = require("express");
 var morgan = require("morgan");
 
+// Load server exrpess
+const app = express();
+
 // Use .env with psw and port
 require("dotenv").config();
 
 // Using a Mongoose setting as a module
 const Person = require("./models/phoneBook");
-
-// Load server exrpess
-const app = express();
 
 // create custom token in order to produce log with req body
 morgan.token("body", function (req, res) {
@@ -26,6 +26,19 @@ app.use(express.static("dist"));
 app.use(
   morgan(":method :url :status :res[content-length] - :response-time ms :body")
 );
+
+//Error handled middleware
+const errorHandler = (error, req, resp, next) => {
+  console.error(error.message);
+  if (error.name === "CastError") {
+    return resp.status(400).send({ error: "Please, check id" });
+  }
+  next(error);
+};
+
+const unknownEndpoint = (req, resp) => {
+  resp.status(404).send({ error: "unknown endpoint" });
+};
 
 //This endpoint works just when dist is out of use
 app.get("/", (req, resp) => {
@@ -88,6 +101,7 @@ app.put("/api/people/:id", (req, resp, next) => {
     name: body.name,
     number: body.number,
   };
+
   Person.findByIdAndUpdate(req.params.id, person, { new: true })
     .then((updatedPerson) => {
       resp.json(updatedPerson);
@@ -103,6 +117,10 @@ app.get("/info", (req, resp) => {
     ${currentDate}`
   );
 });
+
+//Initiate error handler middlewares
+app.use(unknownEndpoint);
+app.use(errorHandler);
 
 const PORT = process.env.PORT;
 
