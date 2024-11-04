@@ -32,6 +32,8 @@ const errorHandler = (error, req, resp, next) => {
   console.error(error.message);
   if (error.name === "CastError") {
     return resp.status(400).send({ error: "Please, check id" });
+  } else if (error.name === "ValitdationError") {
+    return resp.status(400).json({ error: error.message });
   }
   next(error);
 };
@@ -74,35 +76,30 @@ app.delete("/api/people/:id", (req, resp, next) => {
 });
 
 // Create one person
-app.post("/api/people", (req, resp) => {
+app.post("/api/people", (req, resp, next) => {
   // Raw data in json format of request changed into javascript-object and stored≤ in req.body with middleware express.json()
   const body = req.body;
 
-  if (!body.name || !body.number) {
-    return resp.status(400).json({ error: "content missing" });
-  }
-  /*   if (Person.find({}).then((p) => p.name === body.name)) {
-    return resp.status(409).json({ error: "name must be unique" });
-  } */
-
   const person = new Person({
     name: body.name,
-    number: body.number,
+    number: body.number || false,
   });
-  person.save().then((savedPerson) => {
-    resp.json(savedPerson);
-  });
+  person
+    .save()
+    .then((savedPerson) => {
+      resp.json(savedPerson);
+    })
+    .catch((error) => next(error));
 });
 // Update person
 app.put("/api/people/:id", (req, resp, next) => {
-  const body = req.body;
+  const { name, number } = req.body;
 
-  const person = {
-    name: body.name,
-    number: body.number,
-  };
-
-  Person.findByIdAndUpdate(req.params.id, person, { new: true })
+  Person.findByIdAndUpdate(
+    req.params.id,
+    { name, number },
+    { new: true, runValidators: true, context: "query" }
+  )
     .then((updatedPerson) => {
       resp.json(updatedPerson);
     })
