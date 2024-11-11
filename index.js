@@ -84,12 +84,21 @@ app.post("/api/people", (req, resp, next) => {
     name: body.name,
     number: body.number || false,
   });
+
   person
     .save()
     .then((savedPerson) => {
       resp.json(savedPerson);
     })
-    .catch((error) => next(error));
+    .catch((error) => {
+      if (error.name === "ValidationError") {
+        resp.status(400).json({ error: error });
+        console.log("error msg: ", error);
+      } else {
+        next(error.message);
+        console.log("error msg: ", error);
+      }
+    });
 });
 // Update person
 app.put("/api/people/:id", (req, resp, next) => {
