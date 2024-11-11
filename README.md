@@ -4,7 +4,7 @@
 
 # Fly.io
 
-https://fullstack-open-puhelinluettelo-7930.fly.dev
+https://fullstack-open-part3-small-fire-350.fly.dev/
 
 # Render with DB on Mongo Atlas
 
