@@ -1,135 +1,135 @@
-const express = require("express");
-var morgan = require("morgan");
+const express = require('express')
+var morgan = require('morgan')
 
 // Load server exrpess
-const app = express();
+const app = express()
 
 // Use .env with psw and port
-require("dotenv").config();
+require('dotenv').config()
 
 // Using a Mongoose setting as a module
-const Person = require("./models/phoneBook");
+const Person = require('./models/phoneBook')
 
 // create custom token in order to produce log with req body
-morgan.token("body", function (req, res) {
-  let body = req.body;
-  return JSON.stringify(body);
-});
+morgan.token('body', function (req) {
+  let body = req.body
+  return JSON.stringify(body)
+})
 
 // Middleware to parse JSON data, makes the data available in req.bod
-app.use(express.json());
+app.use(express.json())
 
-app.use(express.static("dist"));
+app.use(express.static('dist'))
 
 // Create a new morgan logger middleware
 // using format string of created custom token with body.
 app.use(
-  morgan(":method :url :status :res[content-length] - :response-time ms :body")
-);
+  morgan(':method :url :status :res[content-length] - :response-time ms :body')
+)
 
 //Error handled middleware
 const errorHandler = (error, req, resp, next) => {
-  console.error(error.message);
-  if (error.name === "CastError") {
-    return resp.status(400).send({ error: "Please, check id" });
-  } else if (error.name === "ValitdationError") {
-    return resp.status(400).json({ error: error.message });
+  console.error(error.message)
+  if (error.name === 'CastError') {
+    return resp.status(400).send({ error: 'Please, check id' })
+  } else if (error.name === 'ValitdationError') {
+    return resp.status(400).json({ error: error.message })
   }
-  next(error);
-};
+  next(error)
+}
 
 const unknownEndpoint = (req, resp) => {
-  resp.status(404).send({ error: "unknown endpoint" });
-};
+  resp.status(404).send({ error: 'unknown endpoint' })
+}
 
 //This endpoint works just when dist is out of use
-app.get("/", (req, resp) => {
-  resp.send("<h1>Puhelinluettelo</h1>");
-});
+app.get('/', (req, resp) => {
+  resp.send('<h1>Puhelinluettelo</h1>')
+})
 
 // Get All persons
-app.get("/api/people", (req, resp) => {
+app.get('/api/people', (req, resp) => {
   Person.find({}).then((person) => {
-    resp.json(person);
-  });
-});
+    resp.json(person)
+  })
+})
 // Get One person
-app.get("/api/people/:id", (req, resp, next) => {
+app.get('/api/people/:id', (req, resp, next) => {
   Person.findById(req.params.id)
     .then((person) => {
       if (person) {
-        resp.json(person);
+        resp.json(person)
       } else {
-        resp.status(404).end();
+        resp.status(404).end()
       }
     })
-    .catch((error) => next(error));
-});
+    .catch((error) => next(error))
+})
 
 // Delete one person
-app.delete("/api/people/:id", (req, resp, next) => {
+app.delete('/api/people/:id', (req, resp, next) => {
   Person.findByIdAndDelete(req.params.id)
-    .then((result) => {
-      resp.status(204).end();
+    .then(() => {
+      resp.status(204).end()
     })
-    .catch((error) => next(error));
-});
+    .catch((error) => next(error))
+})
 
 // Create one person
-app.post("/api/people", (req, resp, next) => {
+app.post('/api/people', (req, resp, next) => {
   // Raw data in json format of request changed into javascript-object and stored≤ in req.body with middleware express.json()
-  const body = req.body;
+  const body = req.body
 
   const person = new Person({
     name: body.name,
     number: body.number || false,
-  });
+  })
 
   person
     .save()
     .then((savedPerson) => {
-      resp.json(savedPerson);
+      resp.json(savedPerson)
     })
     .catch((error) => {
-      if (error.name === "ValidationError") {
-        resp.status(400).json({ error: error });
-        console.log("error msg: ", error);
+      if (error.name === 'ValidationError') {
+        resp.status(400).json({ error: error })
+        console.log('error msg: ', error)
       } else {
-        next(error.message);
-        console.log("error msg: ", error);
+        next(error.message)
+        console.log('error msg: ', error)
       }
-    });
-});
+    })
+})
 // Update person
-app.put("/api/people/:id", (req, resp, next) => {
-  const { name, number } = req.body;
+app.put('/api/people/:id', (req, resp, next) => {
+  const { name, number } = req.body
 
   Person.findByIdAndUpdate(
     req.params.id,
     { name, number },
-    { new: true, runValidators: true, context: "query" }
+    { new: true, runValidators: true, context: 'query' }
   )
     .then((updatedPerson) => {
-      resp.json(updatedPerson);
+      resp.json(updatedPerson)
     })
-    .catch((error) => next(error));
-});
+    .catch((error) => next(error))
+})
 
-app.get("/info", (req, resp) => {
-  const count = Person.length;
-  const currentDate = new Date();
+app.get('/info', (req, resp) => {
+  const count = Person.length
+  const currentDate = new Date()
   resp.send(
     `Phonebook has info of ${count} people <br></br>
     ${currentDate}`
-  );
-});
+  )
+})
 
 //Initiate error handler middlewares
-app.use(unknownEndpoint);
-app.use(errorHandler);
+app.use(unknownEndpoint)
+app.use(errorHandler)
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT
 
 app.listen(PORT, () => {
-  console.log(`Server running at PORT: ${PORT}/`);
-});
+  console.log(`Server running at PORT: ${PORT}/`)
+})
