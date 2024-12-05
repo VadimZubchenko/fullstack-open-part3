@@ -18,7 +18,7 @@ const personSchema = new mongoose.Schema({
     required: [true, 'User phone number required'],
   },
 })
-
+// transormate to cleaner format of returned DB json by deleting '_id' and '_v' (version of doc, autom-lly added by Mongoose )
 personSchema.set('toJSON', {
   transform: (document, returnedObject) => {
     returnedObject.id = returnedObject._id.toString()
