@@ -1,11 +1,11 @@
 // Use .env with psw and port
-require('dotenv').config() // moved from index.js
+require('dotenv').config()
 
-let PORT = process.env.PORT // moved from index.js
+let PORT = process.env.PORT
 
-let MONGO_URI = process.env.MONGODB_URI // from phoneBook.js
+let MONGODB_URI = process.env.MONGODB_URI
 
 module.exports = {
   PORT,
-  MONGO_URI,
+  MONGODB_URI,
 }
