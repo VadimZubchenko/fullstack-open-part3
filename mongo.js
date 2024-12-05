@@ -2,10 +2,10 @@ const mongoose = require('mongoose')
 
 // When there's no password as argument
 if (process.argv.length < 3) {
-  console.log('give password')
+  console.log('give password as argument')
   process.exit(1)
 }
-// When there's no name and number as arguments in the request
+// When there's no name and number as arguments
 else if (process.argv.length < 4) {
   const password = process.argv[2]
 
@@ -13,13 +13,12 @@ else if (process.argv.length < 4) {
 
   mongoose.set('strictQuery', false)
   mongoose.connect(url)
-  // Define schema with parametries with type of data
+
   const personSchema = new mongoose.Schema({
     name: String,
     number: String,
   })
 
-  // Create a model of schema
   const Person = mongoose.model('Person', personSchema)
   Person.find({}).then((result) => {
     console.log('phonebook:')
@@ -50,7 +49,7 @@ else if (process.argv.length < 4) {
     number: `${number}`,
   })
 
-  person.save().then(() => {
+  person.save().then((result) => {
     console.log(`added ${name} number ${number}`)
     mongoose.connection.close()
   })
