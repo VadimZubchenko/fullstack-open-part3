@@ -1,2 +1,2 @@
 //DELETE https://fullstack-open-part3-do1q.onrender.com/api/persons/2
-DELETE http://localhost:3001/api/people/67025756609c303d727cb186
+DELETE http://localhost:3001/api/people/67292ce8a5b9c85d7a62ac5e

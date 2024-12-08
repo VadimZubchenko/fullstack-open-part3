@@ -1,6 +1,6 @@
-const { info } = require('.utils/logger')
+const { info } = require('./logger')
 
-const reqLogger = (req, resp, next) => {
+const requestLogger = (req, resp, next) => {
   info('Method:', req.method) // Logs the HTTP method (e.g., GET, POST)
   info('Path:  ', req.path) // Logs the req path (e.g., /api/notes)
   info('Body:  ', req.body) // Logs the req body (if any)
@@ -8,12 +8,12 @@ const reqLogger = (req, resp, next) => {
   next() // Passes control to the next middleware or route handler
 }
 
-//Unknown endpoint handled middleware
+// Unknown endpoint handled middleware
 const unknownEndpoint = (req, resp) => {
   resp.status(404).send({ error: 'unknown endpoint' })
 }
 
-//Error handled middleware
+// Error handled middleware
 const errorHandler = (error, req, resp, next) => {
   console.error(error.message)
   if (error.name === 'CastError') {
@@ -25,7 +25,7 @@ const errorHandler = (error, req, resp, next) => {
 }
 
 module.exports = {
-  reqLogger,
+  requestLogger,
   unknownEndpoint,
   errorHandler,
 }

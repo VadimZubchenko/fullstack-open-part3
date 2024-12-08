@@ -9,21 +9,22 @@ const cors = require('cors')
 const personsRouter = require('./controllers/people') // use routers from controller
 
 const middleware = require('./utils/middleware')
-const logger = require('./utils/logger')
+const { info, error } = require('./utils/logger')
 const mongoose = require('mongoose')
 
 //(false): Mongoose allows query filters with paths not defined in the schema and ignore it without error message.
 mongoose.set('strictQuery', false) //
 
-logger.info('connecting to', config.MONGODB_URI)
+// Connection to DB
+info('connecting to', config.MONGODB_URI)
 
 mongoose
   .connect(config.MONGODB_URI)
   .then(() => {
-    logger.info('connected to MongoDB')
+    info('connected to MongoDB')
   })
-  .catch((error) => {
-    logger.error('error connection to MongoDB:', error.message)
+  .catch((err) => {
+    error('error connection to MongoDB:', err.message)
   })
 
 //////--- Group of middlewares ---\\\\\\\\

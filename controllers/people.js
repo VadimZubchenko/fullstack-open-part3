@@ -1,10 +1,6 @@
 const personsRouter = require('express').Router() //Every Express application has a built-in app router.
+// get schema for mongoose
 const Person = require('../models/phoneBook')
-
-//This endpoint works just when ./dist is out of use
-personsRouter.get('/', (req, resp) => {
-  resp.send('<h1>Puhelinluettelo</h1>')
-})
 
 // Get All persons
 personsRouter.get('/', (req, resp) => {
@@ -30,6 +26,7 @@ personsRouter.get('/:id', (req, resp, next) => {
 personsRouter.post('/', (req, resp, next) => {
   // Raw data in json format of request changed into javascript-object and stored≤ in req.body with middleware express.json()
   const body = req.body
+
   const person = new Person({
     name: body.name,
     number: body.number || false,
@@ -62,6 +59,7 @@ personsRouter.delete('/:id', (req, resp, next) => {
 // Update person
 personsRouter.put('/:id', (req, resp, next) => {
   const { name, number } = req.body
+
   Person.findByIdAndUpdate(
     req.params.id,
     { name, number },
@@ -71,15 +69,6 @@ personsRouter.put('/:id', (req, resp, next) => {
       resp.json(updatedPerson)
     })
     .catch((error) => next(error))
-})
-
-personsRouter.get('/info', (req, resp) => {
-  const count = Person.length
-  const currentDate = new Date()
-  resp.send(
-    `Phonebook has info of ${count} people <br></br>
-    ${currentDate}`
-  )
 })
 
 module.exports = personsRouter

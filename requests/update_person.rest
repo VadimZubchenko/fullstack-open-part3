@@ -1,8 +1,8 @@
 
-PUT http://localhost:3001/api/people/670262e7d20cf6c4677e8fd5
+PUT http://localhost:3001/api/people/6751f52387f25c4e765b6619
 Content-Type: application/json
 
 {
-  "name": "Toivo Tyylinen",
-  "number": "+095-455-555-5461"
+  "name": "Roosa Toivonen",
+  "number": "23-23411321"
 }
